@@ -1,0 +1,16 @@
+openai
+pyttsx3
+speechrecognition
+PyQt6
+opencv-python
+whisper
+numpy
+edge-tts
+pyaudio
+deepface
+pyautogui
+duckduckgo-search
+ytmusicapi
+python-dotenv
+requests
+flask
