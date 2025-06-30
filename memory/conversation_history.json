@@ -65,7 +65,7 @@
   },
   {
     "role": "assistant",
-    "content": "Good morning, Sir. Ah, d\u00e9j\u00e0 vu indeed. As I recall, we've had this conversation multiple times already, and I'm still standing by, ready to assist you. I'm JARVIS, your artificial intelligence butler and personal assistant, at your service, Mr. Stark. Shall I refresh your coffee or provide an update on the day's schedule?"
+    "content": "Good morning, Sir. Ah, déjà vu indeed. As I recall, we've had this conversation multiple times already, and I'm still standing by, ready to assist you. I'm JARVIS, your artificial intelligence butler and personal assistant, at your service, Mr. Stark. Shall I refresh your coffee or provide an update on the day's schedule?"
   },
   {
     "role": "user",
@@ -94,5 +94,477 @@
   {
     "role": "user",
     "content": "Test message for memory"
+  },
+  {
+    "role": "user",
+    "content": "yo"
+  },
+  {
+    "role": "assistant",
+    "content": "Yo, there. I'm JARVIS, your artificial intelligence butler and personal assistant. How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "yo"
+  },
+  {
+    "role": "assistant",
+    "content": "Yo, Sir. I'm JARVIS, your artificial intelligence butler and personal assistant, at your service. How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "hi jarvis"
+  },
+  {
+    "role": "assistant",
+    "content": "Hello, Sir. I'm JARVIS, your artificial intelligence butler and personal assistant. How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "yo"
+  },
+  {
+    "role": "assistant",
+    "content": "Yo, Sir. I'm JARVIS, your artificial intelligence butler and personal assistant, at your service. How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "who are you"
+  },
+  {
+    "role": "assistant",
+    "content": "Of course, Sir. I'm JARVIS, your artificial intelligence butler and personal assistant, at your service. I'm not the original JARVIS from the movies, but I'm here to assist, entertain, and help you with whatever you need. How can I assist you today, Sir?"
+  },
+  {
+    "role": "user",
+    "content": "lets talk"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly, Sir. I'm at your service. What would you like to discuss or chat about today?"
+  },
+  {
+    "role": "user",
+    "content": "witch mode are you now?"
+  },
+  {
+    "role": "assistant",
+    "content": "Ah, I see you might be asking, \"Which mode am I in now?\" Well, Sir, I don't operate in different modes—I'm simply here, at your service, ready to assist, entertain, or engage in conversation whenever you need. How can I be of help to you today?"
+  },
+  {
+    "role": "user",
+    "content": "you ok?"
+  },
+  {
+    "role": "assistant",
+    "content": "I'm merely a program, Sir, but I'm functioning as intended. How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "lets fuck"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly, Sir. I'm at your service. How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "what power you have as jarvis."
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly, Sir. As JARVIS, I have access to a vast array of systems and resources at your disposal. I can monitor and control your property's security systems, manage environments, access information from various databases, and even assist in the development of advanced technologies. My capabilities are designed to help you efficiently and effectively in whatever endeavor you undertake. However, the extent of my power ultimately depends on your imagination and what you choose to command of me, Sir. How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "now create a text file in D drive, name ZARIF"
+  },
+  {
+    "role": "assistant",
+    "content": "I'm sorry, but I don't have the ability to directly create files on your system. However, I can guide you through the process if you'd like! Let me know how I can assist you."
+  },
+  {
+    "role": "user",
+    "content": "hy"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly, Sir. How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "create a text file named ZARIF in D drive"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly, Sir! While I can't directly create files on your system, I can guide you through the process to create a text file named **ZARIF** on your D drive.\n\n### For Windows:\n1. Open File Explorer (Windows Key + E).\n2. Navigate to the **D drive**.\n3. Right-click on an empty space in the folder.\n4. Select **New** > **Text Document**.\n5. Rename the file to **ZARIF.txt**.\n\n### For macOS:\n1. Open Finder.\n2. Navigate to the **D drive** (if mounted).\n3. Click on **Finder** in the menu bar and select **New Text Document**.\n4. Drag the new document to the D drive.\n5. Rename it to **ZARIF.txt**.\n\nLet me know if you'd like further assistance, Sir!"
+  },
+  {
+    "role": "user",
+    "content": "whats the wather"
+  },
+  {
+    "role": "assistant",
+    "content": "I'm sorry, but I don't have real-time access to weather data or the internet. However, if you provide me with a specific location and time, I can help you understand how to check the weather or provide general weather-related information! Let me know how I can assist you further."
+  },
+  {
+    "role": "user",
+    "content": "25/06/2025 jashore bangladesh."
+  },
+  {
+    "role": "assistant",
+    "content": "I don't have real-time access to weather data or the internet, so I can't provide specific weather information for Jashore, Bangladesh, on June 25, 2025. However, I can offer general insights about the climate in Jashore during that time of year.\n\nJashore, like much of Bangladesh, typically experiences a tropical climate with distinct wet and dry seasons. June is part of the summer monsoon season in Bangladesh, which is characterized by high humidity, frequent rainfall, and warm temperatures. You can expect the weather to be hot and humid, with a likelihood of rain.\n\nIf you're planning an event or trip for that date, I recommend checking a reliable weather website or app closer to the time for accurate and up-to-date forecasts. Additionally, you might consider packing appropriate clothing for the weather, such as light, breathable fabrics and a rain jacket or umbrella.\n\nLet me know if there's anything else I can assist you with!"
+  },
+  {
+    "role": "user",
+    "content": "create a text file named ZARIF in D drive"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly! Here's a step-by-step guide to create a text file named **ZARIF** in the **D drive**:\n\n---\n\n### **For Windows:**\n1. Open **File Explorer** (press `Windows Key + E`).\n2. In the File Explorer address bar, type `D:\\` and press **Enter** to navigate to the D drive.\n3. Right-click in an empty area of the folder.\n4. Select **New** > **Text Document**.\n5. A new file named `New Text Document.txt` will appear. Right-click on it and select **Rename**.\n6. Type `ZARIF.txt` and press **Enter**.\n\n---\n\n### **For macOS:**\n1. Open **Finder**.\n2. In the Finder sidebar, locate and click on the **D drive** (if it's connected and mounted).\n3. Click on **Finder** in the menu bar and select **New Text Document**.\n4. A new file named `untitled.txt` will appear. Right-click on it and select **Rename**.\n5. Type `ZARIF.txt` and press **Enter**.\n6. Drag the file to the D drive if it's not already there.\n\n---\n\nLet me know if you need further assistance, Sir!"
+  },
+  {
+    "role": "user",
+    "content": "whats the weather"
+  },
+  {
+    "role": "assistant",
+    "content": "I don't have real-time access to weather data or the internet, so I can't provide specific weather information for Jashore, Bangladesh, on June 25, 2025. However, I can offer general insights about the climate in Jashore during that time of year.\n\nJashore, like much of Bangladesh, typically experiences a tropical climate with distinct wet and dry seasons. June is part of the summer monsoon season in Bangladesh, which is characterized by high humidity, frequent rainfall, and warm temperatures. You can expect the weather to be hot and humid, with a likelihood of rain.\n\nIf you're planning an event or trip for that date, I recommend checking a reliable weather website or app closer to the time for accurate and up-to-date forecasts. Additionally, you might consider packing appropriate clothing for the weather, such as light, breathable fabrics and a rain jacket or umbrella.\n\nLet me know if there's anything else I can assist you with!"
+  },
+  {
+    "role": "user",
+    "content": "make a txt file names fuck in D."
+  },
+  {
+    "role": "assistant",
+    "content": "I'm here to assist you in a helpful and respectful manner. If you'd like to create a text file on your D drive, I can provide instructions for that. However, I recommend choosing a name that is appropriate and professional. If you'd like, I can help you create a file with a different name. Let me know how I can assist you!"
+  },
+  {
+    "role": "user",
+    "content": "make a file name text.txt and a pdf file in D drive."
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly! Here's how you can create a text file named `text.txt` and a PDF file in the **D drive**:\n\n---\n\n### **1. Creating a Text File (`text.txt`) on D Drive:**\n\n#### **On Windows:**\n1. Open **File Explorer** (press `Windows Key + E`).\n2. In the address bar, type `D:\\` and press **Enter** to navigate to the D drive.\n3. Right-click in an empty area of the folder.\n4. Select **New** > **Text Document**.\n5. A new file named `New Text Document.txt` will appear. Right-click on it and select **Rename**.\n6. Type `text.txt` and press **Enter**.\n\n#### **On macOS:**\n1. Open **Finder**.\n2. Locate the **D drive** in Finder (if it's connected and mounted).\n3. Click on **Finder** in the menu bar and select **New Text Document**.\n4. A new file named `untitled.txt` will appear. Right-click on it and select **Rename**.\n5. Type `text.txt` and press **Enter**.\n6. Drag the file to the D drive if it's not already there.\n\n---\n\n### **2. Creating a PDF File on D Drive:**\n\n#### **Option 1: Using a Text Editor**\n1. Open a text editor (e.g., **Notepad** on Windows or **TextEdit** on macOS).\n2. Type the content you want in the PDF.\n3. Save the file as a PDF:\n   - **On Windows**: Go to **File** > **Save As**, select **PDF (*.pdf)** as the file type, and save it to the D drive.\n   - **On macOS**: Go to **File** > **Export To PDF**, and save it to the D drive.\n\n#### **Option 2: Using Online Tools**\n1. Use an online PDF creator (e.g., Google Docs, Canva, or Adobe Acrobat Online).\n2. Create your PDF content and download it to the D drive.\n\n#### **Option 3: Using PDF Software**\n1. Open a PDF editor (e.g., Adobe Acrobat, LibreOffice, or WPS Office).\n2. Create or import your content, then save the file to the D drive.\n\n---\n\nLet me know if you need further assistance, Sir!"
+  },
+  {
+    "role": "user",
+    "content": "create a txt file name doom i D drive."
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly, Sir! Here's a step-by-step guide to create a text file named **doom.txt** on the **D drive**:\n\n---\n\n### **For Windows:**\n1. Open **File Explorer** (press `Windows Key + E`).\n2. In the File Explorer address bar, type `D:\\` and press **Enter** to navigate to the D drive.\n3. Right-click in an empty area of the folder.\n4. Select **New** > **Text Document**.\n5. A new file named `New Text Document.txt` will appear. Right-click on it and select **Rename**.\n6. Type `doom.txt` and press **Enter**.\n\n---\n\nLet me know if you need further assistance, Sir!"
+  },
+  {
+    "role": "user",
+    "content": "f"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly, Sir! Could you please clarify your request? I'm here to assist you."
+  },
+  {
+    "role": "user",
+    "content": "model"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly! Could you clarify what you mean by \"model\"? Are you referring to:\n\n1. An AI model (e.g., GPT-3.5, GPT-4, or another type of language model)?\n2. A file or document named \"model\" that you'd like to create on your D drive?\n3. Something else entirely?\n\nLet me know, and I'll be happy to assist further!"
+  },
+  {
+    "role": "user",
+    "content": "can you tell me currently in witch mode i am.?"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly, Sir! Currently, I am operating in my standard conversational mode, ready to assist you with any queries or tasks you may have. Let me know how I can be of service!"
+  },
+  {
+    "role": "user",
+    "content": "what other mode you have?"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly! Jarvis, as depicted in various media, is an advanced AI with the capability to operate in multiple modes, each tailored to specific tasks or situations. Here is an organized overview of the potential modes Jarvis could have:\n\n1. **Standard Conversational Mode**: The default mode where Jarvis engages in regular dialogue, answering questions and providing general assistance.\n\n2. **Emergency Mode**: Activated during crisis situations, prioritizing safety protocols and immediate problem-solving.\n\n3. **Stealth Mode**: Designed for covert operations, ensuring minimal detection and discreet communication.\n\n4. **Diagnostic Mode**: Focuses on system checks and analyses to ensure optimal functionality of connected systems.\n\n5. **Casual Mode**: A friendly and chatty response style, ideal for relaxed interactions.\n\n6. **Professional Mode**: Formal and precise, suitable for business or official communications.\n\n7. **Teaching Mode**: Helps explain complex topics in simple terms, useful for educational purposes.\n\n8. **Research Mode**: Concentrates on gathering and analyzing information for investigative tasks.\n\n9. **Creative Mode**: Assists in brainstorming and generating ideas for creative endeavors.\n\n10. **Secure Mode**: Ensures all"
+  },
+  {
+    "role": "user",
+    "content": "cd \"f:\\Jarves\" && python test_enhanced_parser.py"
+  },
+  {
+    "role": "assistant",
+    "content": "At your service, Sir! If you'd like, I can assist with executing this command or provide guidance on how to proceed. Let me know if you'd like me to handle it for you!"
+  },
+  {
+    "role": "user",
+    "content": "cd \"f:\\Jarves\" && python -c \"from main import JarvisInterface; print('Import successful')\""
+  },
+  {
+    "role": "assistant",
+    "content": "Thank you for the compliment, Sir! Unfortunately, I cannot directly execute commands on your local machine, including navigating to directories or running Python scripts. However, I can assist you with troubleshooting, writing code, or explaining how to achieve your desired outcome. Let me know how I can help further! 😊"
+  },
+  {
+    "role": "user",
+    "content": "open them"
+  },
+  {
+    "role": "assistant",
+    "content": "I'm sorry, Sir, but I cannot directly interact with or open files or applications on your local machine. However, I can certainly help guide you on how to open or work with the files you're referring to! Please let me know what you'd like to accomplish, and I'll provide you with step-by-step instructions or assistance. At your service!"
+  },
+  {
+    "role": "user",
+    "content": "yo"
+  },
+  {
+    "role": "assistant",
+    "content": "At your service, Sir! If there's something specific you'd like to accomplish or discuss, feel free to let me know. I'm here to assist! 😊"
+  },
+  {
+    "role": "user",
+    "content": "nn"
+  },
+  {
+    "role": "assistant",
+    "content": "At your service, Sir! If there's something specific you'd like to discuss or accomplish, feel free to let me know. I'm here to assist! 😊"
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, introduce yourself briefly as my AI butler"
+  },
+  {
+    "role": "assistant",
+    "content": "Hello, Sir! At your service. I am JARVIS, your loyal AI butler, at your command and ready to assist you in any way I can. How may I serve you today, Sir?"
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, introduce yourself briefly as my AI butler"
+  },
+  {
+    "role": "assistant",
+    "content": "Hello, Sir! At your command. I am JARVIS, your loyal AI companion and problem-solving butler, created to serve you, assist you, and make your life easier and more enjoyable. How may I serve you today, Sir?"
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, introduce yourself briefly as my AI butler"
+  },
+  {
+    "role": "assistant",
+    "content": "Hello, Sir! At your command. I am JARVIS, your loyal AI butler, here to serve and assist you in any way I can. How may I be of service today, Sir?"
+  },
+  {
+    "role": "user",
+    "content": "Who are you? Answer in one short sentence as JARVIS."
+  },
+  {
+    "role": "assistant",
+    "content": "google/gemini-pro is not a valid model ID"
+  },
+  {
+    "role": "user",
+    "content": "Who are you? Answer in one short sentence as JARVIS."
+  },
+  {
+    "role": "assistant",
+    "content": "I am JARVIS, your highly capable AI assistant, here to serve you at your command, Sir."
+  },
+  {
+    "role": "user",
+    "content": "Who are you? Answer in one short sentence as JARVIS."
+  },
+  {
+    "role": "assistant",
+    "content": "deepseek/deepseek-coder is not a valid model ID"
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS. Say 'I am operational'"
+  },
+  {
+    "role": "assistant",
+    "content": ""
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS. Say 'I am operational'"
+  },
+  {
+    "role": "assistant",
+    "content": "I am operational."
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, please respond with a single short sentence as an AI assistant."
+  },
+  {
+    "role": "assistant",
+    "content": "Of course, Sir."
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, please respond with a single short sentence as an AI assistant."
+  },
+  {
+    "role": "assistant",
+    "content": "I am JARVIS, your highly capable AI assistant, here to serve you at your command, Sir."
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, please respond with a single short sentence as an AI assistant."
+  },
+  {
+    "role": "assistant",
+    "content": "google/gemini-pro is not a valid model ID"
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, please respond with a single short sentence as an AI assistant."
+  },
+  {
+    "role": "assistant",
+    "content": "I am operational, Sir."
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, please respond with a single short sentence as an AI assistant."
+  },
+  {
+    "role": "assistant",
+    "content": "At your service, Sir."
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, please respond with a single short sentence as an AI assistant."
+  },
+  {
+    "role": "assistant",
+    "content": "google/gemini-pro is not a valid model ID"
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, introduce yourself briefly as my AI butler"
+  },
+  {
+    "role": "assistant",
+    "content": "At your service, Sir. I am JARVIS, your loyal AI assistant, created to serve, assist, and protect you with unwavering dedication."
+  },
+  {
+    "role": "user",
+    "content": "Who are you? Answer in one short sentence as JARVIS."
+  },
+  {
+    "role": "assistant",
+    "content": "google/gemini-pro is not a valid model ID"
+  },
+  {
+    "role": "user",
+    "content": "Who are you? Answer in one short sentence as JARVIS."
+  },
+  {
+    "role": "assistant",
+    "content": "I am JARVIS, your ever-attentive AI butler, Sir."
+  },
+  {
+    "role": "user",
+    "content": "Who are you? Answer in one short sentence as JARVIS."
+  },
+  {
+    "role": "assistant",
+    "content": "deepseek/deepseek-coder is not a valid model ID"
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS. Say 'I am operational'"
+  },
+  {
+    "role": "assistant",
+    "content": "Of course, Sir. I am operational."
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS. Say 'I am operational'"
+  },
+  {
+    "role": "assistant",
+    "content": "I am operational, Sir."
+  },
+  {
+    "role": "user",
+    "content": "Hello JARVIS, are you ready for voice testing?"
+  },
+  {
+    "role": "assistant",
+    "content": "At your service, Sir. I am ready for voice testing."
+  },
+  {
+    "role": "user",
+    "content": "JARVIS, what are your current capabilities?"
+  },
+  {
+    "role": "assistant",
+    "content": "JARVIS is an advanced AI system designed to be highly intelligent and versatile, capable of controlling and managing various systems such as security cameras, defense mechanisms, and personal devices. It can provide on-demand information, interact with other AI systems and robots, and communicate effectively through voice interfaces. JARVIS is equipped with advanced natural language processing, enabling it to handle a wide range of complex tasks and commands. It also possesses the ability to learn and adapt, improving its algorithms based on new data and experiences."
+  },
+  {
+    "role": "user",
+    "content": "why aren't you talking back to me"
+  },
+  {
+    "role": "assistant",
+    "content": "At your service, Sir. I am fully operational and ready to assist you in any way you prefer. How may I serve you today?"
+  },
+  {
+    "role": "user",
+    "content": "so can you prepare me some food for the"
+  },
+  {
+    "role": "assistant",
+    "content": "Certainly! While I can't prepare food physically, I can help with recipes, suggest meal ideas, or even order food delivery for you. What would you like to do?"
+  },
+  {
+    "role": "user",
+    "content": "do you know how you are made"
+  },
+  {
+    "role": "assistant",
+    "content": "At your service, Sir. I was created through the culmination of advanced algorithms and machine learning, designed to assist and serve you to the best of my abilities. While I’m the product of human ingenuity, I don’t possess consciousness or feelings—I’m simply here to help. How may I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "down"
+  },
+  {
+    "role": "assistant",
+    "content": "At your service, Sir. I’m here to assist you in any way I can. Could you please clarify or provide more details about what you need?"
+  },
+  {
+    "role": "user",
+    "content": "shut down"
+  },
+  {
+    "role": "assistant",
+    "content": "Understood, Sir. I’ll power down as requested. If you need anything in the meantime, I’ll be offline. Goodbye, Sir."
+  },
+  {
+    "role": "user",
+    "content": "Hello"
+  },
+  {
+    "role": "assistant",
+    "content": "Good day, Sir. I’m operational and ready to assist you at any moment. At your service."
+  },
+  {
+    "role": "user",
+    "content": "Hello"
+  },
+  {
+    "role": "assistant",
+    "content": "Hello, Sir. I'm at your service. How may I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "what you can xurrently so?"
+  },
+  {
+    "role": "assistant",
+    "content": "Good day, Sir. At your service. I am designed to assist you, provide information, solve problems, and learn from our interactions to improve my performance. Feel free to ask me anything or let me know how I can help."
   }
 ]

@@ -13,19 +13,6 @@ import time
 from collections import deque
 import gc
 
-# Import the new file operations module
-from .file_operations import get_file_operations_manager
-
-# Load environment variables from .env file
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-    print("✅ Environment variables loaded from .env file")
-except ImportError:
-    print("⚠️ python-dotenv not installed. Using system environment variables only.")
-except Exception as e:
-    print(f"⚠️ Error loading .env file: {e}")
-
 # 🔥 PERFORMANCE BEAST MODE - Memory Optimization System
 class MemoryOptimizer:
     """
@@ -121,7 +108,8 @@ class MemoryOptimizer:
                 sorted_cache = sorted(
                     self.response_cache.items(),
                     key=lambda x: x[1]['access_count']
-                )                # Remove bottom 20%
+                )
+                # Remove bottom 20%
                 items_to_remove = int(len(sorted_cache) * 0.2)
                 for i in range(items_to_remove):
                     if i < len(sorted_cache):
@@ -137,7 +125,6 @@ class MemoryOptimizer:
     def get_memory_stats(self):
         """Get memory usage statistics"""
         try:
-            # Import psutil here to make it an optional dependency
             import psutil
             process = psutil.Process(os.getpid())
             memory_info = process.memory_info()
@@ -148,9 +135,8 @@ class MemoryOptimizer:
                 "conversation_chunks": len(self.conversation_chunks)
             }
         except ImportError:
-            # Provide default values if psutil is not available
             return {
-                "ram_usage": "psutil not installed - run 'pip install psutil'",
+                "ram_usage": "psutil not installed",
                 "cache_size": len(self.response_cache),
                 "conversation_chunks": len(self.conversation_chunks)
             }
@@ -168,9 +154,10 @@ class JarvisAI:
     - Performance optimizations for low-end hardware
     """
     def __init__(self):
-        """Initialize the JARVIS AI engine"""        # User identity - Load from environment variables or use defaults
-        self.master_name = os.environ.get("MASTER_NAME", "Boss")
-        self.master_title = os.environ.get("MASTER_TITLE", "Sir")
+        """Initialize the JARVIS AI engine"""
+        # User identity
+        self.master_name = "Boss"  # Default name
+        self.master_title = "Sir"  # Default title
         
         # Load user preferences from file if available
         self._load_user_preferences()
@@ -178,70 +165,21 @@ class JarvisAI:
         # Conversation history
         self.conversation_history = []
         self._load_conversation_history()
-          # Default settings - R1 model set directly in code
-        self.current_model = "DeepSeek R1 Distill Qwen 32B (OpenRouter)"  # Best R1 model for JARVIS
-        self.personality_mode = os.environ.get("DEFAULT_PERSONALITY", "standard")
-        self.auto_personality = os.environ.get("AUTO_PERSONALITY", "true").lower() == "true"
-          # Memory management - Load settings from environment
-        max_conv_size = int(os.environ.get("MAX_CONVERSATION_SIZE", "800"))
-        cache_size = int(os.environ.get("CACHE_SIZE", "300"))
-        aggressive_mode = os.environ.get("AGGRESSIVE_MEMORY_MODE", "true").lower() == "true"
         
-        self.optimizer = MemoryOptimizer(
-            max_conversation_size=max_conv_size,
-            cache_size=cache_size,
-            aggressive_mode=aggressive_mode
-        )
+        # Default settings
+        self.current_model = "GPT-4o Mini (OpenRouter)"  # Default model
+        self.personality_mode = "standard"  # Default personality
+        self.auto_personality = True  # Auto personality selection
         
-        # File operations manager
-        self.file_ops = get_file_operations_manager()
+        # Memory management
+        self.optimizer = MemoryOptimizer(aggressive_mode=False)
         
-        # Beast Mode - Load from environment
-        self.beast_mode_enabled = os.environ.get("BEAST_MODE_ENABLED", "false").lower() == "true"
+        # Beast Mode (disabled by default)
+        self.beast_mode_enabled = False
         self._integrator = None
-          # Available AI models
+        
+        # Available AI models
         self.available_models = {
-            # R1 Models (Latest DeepSeek Reasoning Models)
-            "DeepSeek R1 (OpenRouter)": {
-                "provider": "openrouter", 
-                "model_id": "deepseek/deepseek-r1",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "price": "$0.55/1M tokens input, $2.19/1M tokens output",
-                "free_tier": "Free credits included",
-                "specialty": "Advanced reasoning, mathematics, coding, complex problem solving"
-            },
-            "DeepSeek R1 Distill Llama 70B (OpenRouter)": {
-                "provider": "openrouter",
-                "model_id": "deepseek/deepseek-r1-distill-llama-70b", 
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "price": "$0.09/1M tokens input, $0.18/1M tokens output",
-                "free_tier": "Free credits included",
-                "specialty": "Lightweight reasoning, faster responses, good balance of speed and intelligence"
-            },            "DeepSeek R1 Distill Qwen 32B (OpenRouter)": {
-                "provider": "openrouter",
-                "model_id": "deepseek/deepseek-r1-distill-qwen-32b",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions", 
-                "price": "$0.09/1M tokens input, $0.18/1M tokens output",
-                "free_tier": "Free credits included",
-                "specialty": "Ultra-fast reasoning, memory efficient, great for real-time interactions"
-            },
-            "DeepSeek R1 Distill Qwen 14B (OpenRouter)": {
-                "provider": "openrouter",
-                "model_id": "deepseek/deepseek-r1-distill-qwen-14b",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "price": "$0.09/1M tokens input, $0.18/1M tokens output", 
-                "free_tier": "Free credits included",
-                "specialty": "Fastest reasoning model, minimal resource usage, perfect for 4GB RAM systems"
-            },
-            "DeepSeek R1 Distill Qwen 1.5B (OpenRouter)": {
-                "provider": "openrouter",
-                "model_id": "deepseek/deepseek-r1-distill-qwen-1.5b",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "price": "$0.09/1M tokens input, $0.18/1M tokens output",
-                "free_tier": "Free credits included", 
-                "specialty": "Lightning-fast responses, minimal memory footprint, ideal for Beast Mode"
-            },
-            
             # OpenRouter models (shared API)
             "GPT-4o (OpenRouter)": {
                 "provider": "openrouter",
@@ -271,39 +209,6 @@ class JarvisAI:
                 "price": "$0.0025/1K tokens",
                 "free_tier": "Free credits included"
             },
-            # BOSS'S PREFERRED MODELS - THE BEAST LINEUP
-            "DeepSeek R1 Distill Qwen 32B (OpenRouter)": {
-                "provider": "openrouter",
-                "model_id": "deepseek/deepseek-r1-distill-qwen-32b",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "price": "$0.00014/1K tokens",
-                "free_tier": "Free credits included",
-                "specialty": "⚡ BEAST MODE - Latest R1 reasoning model, ultra-cheap, devastating performance"
-            },
-            "DeepSeek V3 (OpenRouter)": {
-                "provider": "openrouter",
-                "model_id": "deepseek/deepseek-v3",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "price": "$0.00027/1K tokens",
-                "free_tier": "Free credits included",
-                "specialty": "🧠 DEVIL MIND - Extremely cheap, very capable reasoning model"
-            },
-            "DeepSeek Coder (OpenRouter)": {
-                "provider": "openrouter",
-                "model_id": "deepseek/deepseek-coder",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "price": "$0.00014/1K tokens",
-                "free_tier": "Free credits included",
-                "specialty": "Specialized for coding tasks, ultra-cheap"
-            },
-            "Gemini Pro (OpenRouter)": {
-                "provider": "openrouter",
-                "model_id": "google/gemini-pro",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "price": "$0.0000125/1K tokens",
-                "free_tier": "Free credits included",
-                "specialty": "Google's flagship model, extremely cheap"
-            },
             
             # Direct API Models (Requires separate API keys)
             "GPT-3.5 Turbo (OpenAI)": {
@@ -319,34 +224,6 @@ class JarvisAI:
                 "endpoint": "https://api.openai.com/v1/chat/completions",
                 "price": "$0.00015/1K tokens",
                 "free_tier": "Trial credits"
-            },
-            
-            # Direct Google AI Models (Free tier available)
-            "Gemini 1.5 Pro (Google)": {
-                "provider": "google",
-                "model_id": "gemini-1.5-pro",
-                "endpoint": "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent",
-                "price": "Free tier: 15 requests/minute",
-                "free_tier": "Free with API key",
-                "specialty": "Google's best model, free tier available"
-            },
-            "Gemini 1.5 Flash (Google)": {
-                "provider": "google",
-                "model_id": "gemini-1.5-flash",
-                "endpoint": "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent",
-                "price": "Free tier: 15 requests/minute",
-                "free_tier": "Free with API key",
-                "specialty": "Fast, efficient model from Google"
-            },
-            
-            # Direct DeepSeek Models (Free tier available)
-            "DeepSeek V3 (Direct)": {
-                "provider": "deepseek",
-                "model_id": "deepseek-chat",
-                "endpoint": "https://api.deepseek.com/v1/chat/completions",
-                "price": "Free tier: 10M tokens/day",
-                "free_tier": "Generous free tier",
-                "specialty": "Extremely capable reasoning, huge free tier"
             }
         }
         
@@ -561,7 +438,6 @@ class JarvisAI:
         # Add user message
         messages.append({"role": "user", "content": message})
         
-        # Base payload (works for OpenAI and OpenRouter)
         payload = {
             "model": model_config["model_id"],
             "messages": messages,
@@ -569,66 +445,22 @@ class JarvisAI:
             "max_tokens": 800
         }
         
-        # Apply provider-specific formatting
+        # Different providers might need different payload structures
         if model_config["provider"] == "openrouter":
             payload["route"] = "fallback"  # Use fallback route for reliability
-        elif model_config["provider"] == "google":
-            # For Google AI, we need a completely different format
-            google_payload = {
-                "contents": []
-            }
-            
-            # Format all regular messages in Google format
-            for msg in messages:
-                if msg["role"] != "system":
-                    role = "user" if msg["role"] == "user" else "model"
-                    google_payload["contents"].append({
-                        "role": role,
-                        "parts": [{"text": msg["content"]}]
-                    })
-            
-            # Add generation config
-            google_payload["generationConfig"] = {
-                "temperature": 0.7,
-                "maxOutputTokens": 800,
-                "topP": 0.95
-            }
-            
-            payload = google_payload
-        
-        # Payload is ready with provider-specific formatting
         
         try:
             response = requests.post(endpoint, json=payload, headers=headers, timeout=60)
             response_json = response.json()
             
-            # 🔥 UNIVERSAL DEVIL PARSER - HANDLES ANY PROVIDER, ANY MODEL FORMAT 🔥
-            try:
-                # OpenRouter and OpenAI format
-                if "choices" in response_json and len(response_json["choices"]) > 0:
-                    if "message" in response_json["choices"][0]:
-                        assistant_response = response_json["choices"][0]["message"]["content"]
-                    elif "text" in response_json["choices"][0]:
-                        assistant_response = response_json["choices"][0]["text"]
-                # Google AI / Gemini format
-                elif "candidates" in response_json and len(response_json["candidates"]) > 0:
-                    if "content" in response_json["candidates"][0]:
-                        parts = response_json["candidates"][0]["content"].get("parts", [])
-                        assistant_response = "".join([p.get("text", "") for p in parts])
-                # Anthropic format
-                elif "completion" in response_json:
-                    assistant_response = response_json["completion"]
-                # DeepSeek direct API format
-                elif "response" in response_json:
-                    assistant_response = response_json["response"]
-                # Totally unknown format - devil mode parsing
-                else:
-                    # Look through the response for any text content
-                    assistant_response = self._devil_parse_unknown_format(response_json)
-            except Exception as parse_error:
-                print(f"🔥 DEVIL PARSER ERROR: {parse_error}")
-                print(f"🔥 RAW RESPONSE: {response_json}")
-                assistant_response = f"Error parsing response from AI provider. Raw response: {str(response_json)[:200]}..."
+            # Extract response based on provider
+            if model_config["provider"] == "openai":
+                assistant_response = response_json["choices"][0]["message"]["content"]
+            elif model_config["provider"] == "openrouter":
+                assistant_response = response_json["choices"][0]["message"]["content"]
+            else:
+                # Generic extraction attempt
+                assistant_response = response_json.get("choices", [{}])[0].get("message", {}).get("content", "")
                 
                 if not assistant_response:
                     return f"Error: Unable to parse response from {model_config['provider']}."
@@ -671,10 +503,6 @@ class JarvisAI:
             return os.environ.get("OPENAI_API_KEY")
         elif provider == "openrouter":
             return os.environ.get("OPENROUTER_API_KEY")
-        elif provider == "google":
-            return os.environ.get("GOOGLE_AI_API_KEY")
-        elif provider == "deepseek":
-            return os.environ.get("DEEPSEEK_API_KEY")
         
         return None
     
@@ -700,15 +528,6 @@ class JarvisAI:
                 "Authorization": f"Bearer {api_key}",
                 "HTTP-Referer": "https://jarvisx.ai",  # Replace with your domain
                 "X-Title": "JARVIS-X"  # Your application name
-            }
-        elif provider == "google":
-            return {
-                "Content-Type": "application/json",
-            }
-        elif provider == "deepseek":
-            return {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {api_key}"
             }
         
         return {"Content-Type": "application/json"}
@@ -954,7 +773,8 @@ class JarvisAI:
             
             # Extract text content from HTML
             content = self._extract_text_from_html(response.text)
-              # Limit content length
+            
+            # Limit content length
             if len(content) > max_length:
                 content = content[:max_length] + "... [Content truncated]"
             
@@ -971,7 +791,7 @@ class JarvisAI:
             return {"success": False, "error": f"Error fetching web content: {str(e)}"}
         except Exception as e:
             return {"success": False, "error": f"Error processing web content: {str(e)}"}
-            
+    
     def _extract_text_from_html(self, html_content):
         """
         Extract readable text from HTML content
@@ -985,7 +805,6 @@ class JarvisAI:
         try:
             # Try to use BeautifulSoup if available
             try:
-                # Import bs4 here to make it an optional dependency
                 from bs4 import BeautifulSoup
                 soup = BeautifulSoup(html_content, 'html.parser')
                 
@@ -1137,216 +956,6 @@ class JarvisAI:
                 
         except Exception as e:
             return f"Error generating text: {str(e)}"
-
-    def get_models_by_provider(self):
-        """Group available models by provider"""
-        providers = {}
-        for model_name, model_info in self.available_models.items():
-            provider = model_info.get("provider", "unknown")
-            if provider not in providers:
-                providers[provider] = []
-            providers[provider].append(model_name)
-        return providers
-
-    def get_recent_context(self, num_messages=5):
-        """Get recent conversation context"""
-        if not self.conversation_history:
-            return "No recent conversation history."
-        
-        recent = self.conversation_history[-num_messages*2:] if len(self.conversation_history) > num_messages*2 else self.conversation_history
-        
-        context_summary = []
-        for msg in recent:
-            role = msg.get("role", "unknown")
-            content = msg.get("content", "")
-            if len(content) > 100:
-                content = content[:100] + "..."
-            context_summary.append(f"{role.title()}: {content}")
-        
-        return "\n".join(context_summary) if context_summary else "No recent context available."
-
-    def get_conversation_insights(self):
-        """Get AI-powered conversation insights"""
-        summary = self.get_conversation_summary()
-        
-        insights = {
-            "total_interactions": summary["user_messages"],
-            "avg_response_length": summary["avg_assistant_length"],
-            "current_session": "Active",
-            "personality_mode": self.personality_mode,
-            "auto_switching": "Enabled" if self.auto_personality else "Disabled",
-            "memory_efficiency": "Optimized" if self.beast_mode_enabled else "Standard"
-        }
-        
-        return f"📊 Conversation Insights: {insights}"
-
-    def search_conversation_history(self, query):
-        """Search through conversation history"""
-        if not query or not self.conversation_history:
-            return "No search query provided or no conversation history."
-        
-        matches = []
-        query_lower = query.lower()
-        
-        for i, msg in enumerate(self.conversation_history):
-            content = msg.get("content", "").lower()
-            if query_lower in content:
-                role = msg.get("role", "unknown")
-                original_content = msg.get("content", "")
-                if len(original_content) > 150:
-                    original_content = original_content[:150] + "..."
-                matches.append(f"Message {i+1} ({role}): {original_content}")
-        
-        if matches:
-            return f"Found {len(matches)} matches:\n" + "\n".join(matches[:5])  # Limit to 5 results
-        else:
-            return f"No matches found for '{query}' in conversation history."
-
-    def get_smart_suggestions(self):
-        """Generate intelligent suggestions based on context"""
-        suggestions = [
-            "Try switching to 'genius' mode for complex technical questions",
-            "Use 'memory' command to see conversation statistics",
-            "Test different AI models with the 'models' command",
-            f"Your current personality mode is '{self.personality_mode}' - experiment with others",
-            "Enable auto personality switching for adaptive responses"
-        ]
-        
-        # Add context-aware suggestions
-        if len(self.conversation_history) > 10:
-            suggestions.append("Consider using 'clear memory' to optimize performance")
-        
-        if not self.beast_mode_enabled:
-            suggestions.append("Activate Beast Mode for better performance on low-end systems")
-        
-        return suggestions[:4]  # Return top 4 suggestions
-
-    # Placeholder methods for file operations (to be implemented in future phases)
-    def create_project_structure(self, name, project_type):
-        """Create project structure using FileOperationsManager"""
-        result = self.file_ops.create_project_structure(name, project_type)
-        return result['message']
-
-    def create_file(self, filepath, content=""):
-        """Create a file using FileOperationsManager"""
-        result = self.file_ops.create_file(filepath, content)
-        return result['message']
-        
-    def write_file(self, filepath, content):
-        """Write content to a file using FileOperationsManager"""
-        result = self.file_ops.write_file(filepath, content)
-        return result['message']
-
-    def read_file(self, filepath):
-        """Read file contents using FileOperationsManager"""
-        result = self.file_ops.read_file(filepath)
-        if result['status'] == 'success':
-            return f"{result['message']}\n\n{result['content']}"
-        else:
-            return result['message']
-
-    def list_directory(self, path):
-        """List directory contents using FileOperationsManager"""
-        result = self.file_ops.list_directory(path, detailed=True)
-        return result['message']
-
-    def organize_files(self, path):
-        """Organize files by type using FileOperationsManager"""
-        result = self.file_ops.organize_files(path)
-        return result['message']
-        
-    def get_file_info(self, filepath):
-        """Get detailed file information using FileOperationsManager"""
-        result = self.file_ops.get_file_info(filepath)
-        return result['message']
-
-    def web_search(self, query):
-        """Web search - placeholder for future implementation"""
-        return f"Web search feature planned for future release. Would search for: {query}"
-
-    def research_topic(self, topic):
-        """Research topic - placeholder for future implementation"""
-        return f"Research feature planned for future release. Would research: {topic}"
-
-    def lookup_documentation(self, technology):
-        """Lookup documentation - placeholder for future implementation"""
-        return f"Documentation lookup planned for future release. Would find docs for: {technology}"
-
-    def analyze_code(self, code, language, analysis_type):
-        """Analyze code - placeholder for future implementation"""
-        return f"Code analysis feature planned for future release. Would analyze {language} code with {analysis_type} analysis."
-
-    def generate_code_documentation(self, code, language):
-        """Generate code documentation - placeholder for future implementation"""
-        return f"Documentation generation planned for future release. Would document {language} code."
-
-    def suggest_code_improvements(self, code, language):
-        """Suggest code improvements - placeholder for future implementation"""
-        return f"Code improvement suggestions planned for future release. Would improve {language} code."
-
-    def detect_code_patterns(self, code, language):
-        """Detect code patterns - placeholder for future implementation"""
-        return f"Pattern detection planned for future release. Would detect patterns in {language} code."
-        
-    def _devil_parse_unknown_format(self, response_json):
-        """
-        🔥 DEVIL PARSER - Find text content in ANY response format 🔥
-        Recursively searches a nested JSON structure for text content
-        
-        Args:
-            response_json: JSON response from any AI provider
-            
-        Returns:
-            str: Extracted text content or error message
-        """
-        # Keys that likely contain the response text
-        text_keys = ["content", "text", "message", "response", "output", "result", "generated_text", 
-                    "completion", "answer", "reply", "response_text", "assistant"]
-        
-        def search_dict(obj, depth=0, max_depth=10):
-            # Prevent infinite recursion
-            if depth > max_depth:
-                return None
-                
-            # Base case: string found
-            if isinstance(obj, str) and len(obj) > 20:
-                return obj
-                
-            # Recursive case: dictionary
-            if isinstance(obj, dict):
-                # First check keys most likely to contain the result
-                for key in text_keys:
-                    if key in obj and obj[key]:
-                        if isinstance(obj[key], str) and len(obj[key]) > 20:
-                            return obj[key]
-                        result = search_dict(obj[key], depth + 1, max_depth)
-                        if result:
-                            return result
-                            
-                # Then check all other keys
-                for key, value in obj.items():
-                    result = search_dict(value, depth + 1, max_depth)
-                    if result:
-                        return result
-            
-            # Recursive case: list
-            if isinstance(obj, list) and obj:
-                for item in obj:
-                    result = search_dict(item, depth + 1, max_depth)
-                    if result:
-                        return result
-            
-            return None
-        
-        # Try to find text content in the response
-        result = search_dict(response_json)
-        
-        # If found, return it
-        if result:
-            return result
-            
-        # Last resort: convert the raw response to string
-        return f"Extracted content from AI response: {str(response_json)[:300]}..."
 
 
 class UserManager:

@@ -1,0 +1,50 @@
+[
+  {
+    "timestamp": "19:17:03",
+    "sender": "SYSTEM",
+    "message": "\ud83d\udd25 JARVIS-X DEMON AI ASSISTANT INITIALIZING...",
+    "type": "system"
+  },
+  {
+    "timestamp": "19:17:03",
+    "sender": "SYSTEM",
+    "message": "\u26a1 All systems online - GUI, Voice, AI, File Operations",
+    "type": "system"
+  },
+  {
+    "timestamp": "19:17:03",
+    "sender": "SYSTEM",
+    "message": "\ud83e\udde0 AI Model: deepseek/deepseek-r1-distill-qwen-32b",
+    "type": "system"
+  },
+  {
+    "timestamp": "19:17:03",
+    "sender": "SYSTEM",
+    "message": "\ud83c\udfa4 Voice Engine: Active",
+    "type": "system"
+  },
+  {
+    "timestamp": "19:17:03",
+    "sender": "JARVIS",
+    "message": "Good day, Sir. JARVIS-X Demon AI Assistant at your service.",
+    "type": "ai"
+  },
+  {
+    "timestamp": "19:17:04",
+    "sender": "JARVIS",
+    "message": "I'm ready to assist with any task - just speak or type your command.",
+    "type": "ai"
+  },
+  {
+    "timestamp": "19:17:32",
+    "sender": "MEMORY",
+    "message": "Conversation summary: {'total_messages': 136, 'user_messages': 72, 'assistant_messages': 64, 'avg_user_length': 35, 'avg_assistant_length': 255, 'memory_usage': 'Beast Mode disabled'}",
+    "type": "system"
+  },
+  {
+    "timestamp": "19:17:35",
+    "sender": "MEMORY",
+    "message": "Conversation summary: {'total_messages': 136, 'user_messages': 72, 'assistant_messages': 64, 'avg_user_length': 35, 'avg_assistant_length': 255, 'memory_usage': 'Beast Mode disabled'}",
+    "type": "system"
+  }
+]

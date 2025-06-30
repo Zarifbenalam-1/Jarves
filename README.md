@@ -49,20 +49,75 @@ OPENROUTER_API_KEY=your_key_here
 OPENAI_API_KEY=your_openai_key_here
 ```
 
-### 4. Install & Run
+### 4. Choose Your Interface & Run
+
+#### **🚀 Launcher Menu (Recommended)**
 ```bash
 # Install dependencies
 pip install -r requirements.txt
 
-# Run Jarvis-X
+# Launch interface selector
+python launcher.py
+```
+Choose between Terminal (1) or Modern GUI (2) interface
+
+#### **💻 Terminal Interface (Classic)**
+```bash
+# Direct terminal launch
 python main.py
 ```
+Classic command-line experience with full JARVIS capabilities
+
+#### **🖥️ GUI Interface (Modern)**
+```bash
+# Direct GUI launch  
+python jarvis_gui.py
+```
+Modern Iron Man-themed graphical interface with:
+- Real-time chat window
+- Visual AI settings controls
+- File operations panel  
+- System monitoring display
+- Iron Man color scheme
+
+#### **⚡ Windows Users - One-Click Launch**
+- Double-click `launch_gui.bat` for GUI interface
+- Double-click `launch_terminal.bat` for terminal interface
 
 **That's it! JARVIS will greet you as Mr. Stark with full intelligence.**
 
 ---
 
-## 💾 DEVIL MIND - Persistent Memory System
+## �️ GUI Interface Features
+
+### 🎨 Iron Man-Themed Design
+- **Dark Theme**: Deep black/gray color scheme
+- **Accent Colors**: Iron Man red, gold, and arc reactor blue
+- **Professional Layout**: Clean, modern interface design
+- **Responsive**: Adapts to different screen sizes
+
+### 💬 Advanced Chat Interface
+- **Real-time Messaging**: Live conversation with JARVIS
+- **Color-coded Messages**: User (blue), JARVIS (gold), System (red)
+- **Timestamps**: Track conversation history
+- **Auto-scrolling**: Always shows latest messages
+- **Multi-line Input**: Support for longer messages
+
+### 🎛️ Control Panels
+- **AI Settings**: Switch models and personalities visually
+- **File Operations**: Create, read, and manage files with dialogs
+- **System Monitor**: Live system information and status
+- **Quick Actions**: One-click access to common commands
+
+### ⚡ Enhanced Experience
+- **Non-blocking Processing**: UI stays responsive during AI work
+- **Visual Feedback**: Processing indicators and status updates
+- **Keyboard Shortcuts**: Enter to send, Ctrl+Enter for new lines
+- **Error Handling**: Graceful error display and recovery
+
+---
+
+## �💾 DEVIL MIND - Persistent Memory System
 
 ### 🧠 How It Works:
 - **Every conversation saved** to local JSON files

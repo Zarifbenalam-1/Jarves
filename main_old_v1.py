@@ -1,375 +1,53 @@
-#!/usr/bin/env python3
-"""
-JARVIS-X MAIN ORCHESTRATOR
-Central Command & Control System - The Master Hub
-
-This is the single entry point for the entire JARVIS-X system.
-All modules (Voice, GUI, AI, File Operations, Web Search) are subordinates
-managed by this central orchestrator.
-
-🎯 FEATURES:
-- Central command routing to all modules
-- Unified interface (Terminal, GUI, Voice)
-- Module lifecycle management
-- Cross-module communication hub
-- Intelligent command dispatching
-- System health monitoring
-
-🔧 ARCHITECTURE:
-Main Orchestrator (this file)
-├── AI Engine Module
-├── Voice Interface Module
-├── GUI Interface Module  
-├── File Operations Module
-├── Web Search Module
-├── Memory Management Module
-└── System Health Module
-
-Author: JARVIS-X Development Team
-Version: 2.0.0 - Orchestrator Architecture
-"""
+# main.py
+# Entry point for Jarvis-X
 
 import os
 import sys
-import asyncio
-import threading
-import time
-import json
-import traceback
-import subprocess
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Callable, Union
-from enum import Enum
-from dataclasses import dataclass
-from datetime import datetime
-
-# Add project path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Import all core modules
-try:
-    from assistant.ai_engine import JarvisAI
-    from assistant.file_operations import FileOperationsManager
-except ImportError as e:
-    print(f"⚠️ Warning: Could not import core modules: {e}")
-    JarvisAI = None
-    FileOperationsManager = None
+from assistant.ai_engine import JarvisAI
 
-class ModuleStatus(Enum):
-    """Module status enumeration"""
-    UNINITIALIZED = "uninitialized"
-    INITIALIZING = "initializing"
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-    ERROR = "error"
-    TERMINATED = "terminated"
-
-class InterfaceMode(Enum):
-    """Interface mode enumeration"""
-    TERMINAL = "terminal"
-    GUI = "gui"
-    VOICE = "voice"
-    HYBRID = "hybrid"
-
-@dataclass
-class ModuleInfo:
-    """Module information container"""
-    name: str
-    status: ModuleStatus
-    instance: Optional[Any] = None
-    last_error: Optional[str] = None
-    initialized_at: Optional[datetime] = None
-    error_count: int = 0
-
-class JarvisXOrchestrator:
-    """
-    JARVIS-X Central Orchestrator
-    The master controller that manages all system modules
-    """
-    
+class JarvisXTerminal:
     def __init__(self):
-        """Initialize the JARVIS-X Orchestrator"""
-        self.version = "2.0.0"
-        self.system_name = "JARVIS-X Ultimate System"
-        self.modules: Dict[str, ModuleInfo] = {}
-        self.active_interfaces: List[InterfaceMode] = []
-        self.command_queue = asyncio.Queue()
-        self.response_callbacks: Dict[str, Callable] = {}
-        self.system_running = False
-        self.running = True  # For terminal interface loop
-        self.debug_mode = False
+        self.ai = JarvisAI()
+        self.running = True
         
-        # Initialize core modules registry
-        self._register_core_modules()
+    def print_header(self):
+        master_info = self.ai.get_master_identity()
+        print("🤖" + "="*50)
+        print("    JARVIS: Iron Man AI Assistant")
+        print(f"    Serving: {master_info['name']} ({master_info['title']})")
+        print("="*52)
+        print(f"Current AI Model: {self.ai.get_current_model()}")
+        print(f"Personality Mode: {self.ai.get_current_personality().title()}")
+        auto_status = "ON" if self.ai.is_auto_personality_enabled() else "OFF"
+        print(f"Auto Personality: {auto_status}")
+        print("="*52)
         
-        # Initialize core AI engine for immediate use
-        self._init_core_ai()
+        # Show JARVIS greeting
+        greeting = self.ai.get_session_greeting()
+        if greeting:
+            print(f"\n🤖 JARVIS: {greeting}")
+            print("🤖 JARVIS: How may I assist you today?")
         
-        print(self._get_startup_banner())
-    
-    def _init_core_ai(self):
-        """Initialize core AI engine synchronously for immediate use"""
-        try:
-            print("🧠 Initializing AI Engine...")
-            if JarvisAI is not None:
-                self.ai = JarvisAI()
-                # Update module status
-                if "ai_engine" in self.modules:
-                    self.modules["ai_engine"].instance = self.ai
-                    self.modules["ai_engine"].status = ModuleStatus.ACTIVE
-                    self.modules["ai_engine"].initialized_at = datetime.now()
-                print("✅ AI Engine initialized successfully")
-            else:
-                print("⚠️ AI Engine not available - using placeholder")
-                # Create a simple placeholder
-                class AIPlaceholder:
-                    def chat(self, message): return "AI Engine not available"
-                    def get_models_by_provider(self): return {}
-                    def get_current_model(self): return "none"
-                    def get_personality_modes(self): return ["default"]
-                    def get_current_personality(self): return "default"
-                    def get_master_identity(self): return {"name": "Unknown", "title": "User", "established": False}
-                    def get_conversation_summary(self): return "No conversation yet"
-                    def get_recent_context(self, n): return "No context available"
-                    def clear_conversation_history(self): return "No history to clear"
-                    def switch_model(self, model): pass
-                    def switch_personality(self, personality): pass
-                    def toggle_auto_personality(self): return "disabled"
-                self.ai = AIPlaceholder()
-        except Exception as e:
-            print(f"⚠️ Warning: AI Engine initialization failed: {e}")
-            # Create minimal placeholder
-            class AIPlaceholder:
-                def chat(self, message): return f"AI Error: {str(e)}"
-                def get_models_by_provider(self): return {}
-                def get_current_model(self): return "error"
-                def get_personality_modes(self): return ["default"]
-                def get_current_personality(self): return "default"  
-                def get_master_identity(self): return {"name": "Unknown", "title": "User", "established": False}
-                def get_conversation_summary(self): return "Error in AI system"
-                def get_recent_context(self, n): return "Error in AI system"
-                def clear_conversation_history(self): return "Error in AI system"
-                def switch_model(self, model): pass
-                def switch_personality(self, personality): pass
-                def toggle_auto_personality(self): return "error"
-            self.ai = AIPlaceholder()
-        
-    def _register_core_modules(self):
-        """Register all core system modules"""
-        core_modules = [
-            "ai_engine",
-            "file_operations", 
-            "voice_interface",
-            "gui_interface",
-            "web_search",
-            "memory_manager",
-            "health_monitor"
-        ]
-        
-        for module_name in core_modules:
-            self.modules[module_name] = ModuleInfo(
-                name=module_name,
-                status=ModuleStatus.UNINITIALIZED
-            )
-    
-    def _get_startup_banner(self) -> str:
-        """Get the system startup banner"""
-        banner = f"""
-🤖{"="*70}🤖
-    JARVIS-X ORCHESTRATOR v{self.version}
-    Central Command & Control System
-    
-    🎯 SYSTEM STATUS: INITIALIZING
-    🔧 ARCHITECTURE: Orchestrator Pattern
-    🚀 INTERFACE MODES: Terminal | GUI | Voice | Hybrid
-🤖{"="*70}🤖
-"""
-        return banner
-    
-    async def initialize_system(self) -> bool:
-        """Initialize all system modules"""
-        print("🔄 Initializing JARVIS-X System...")
-        
-        try:
-            # Initialize AI Engine (Core Module)
-            await self._initialize_ai_engine()
-            
-            # Initialize File Operations
-            await self._initialize_file_operations()
-            
-            # Initialize other modules
-            await self._initialize_voice_interface()
-            await self._initialize_gui_interface()
-            await self._initialize_web_search()
-            await self._initialize_memory_manager()
-            await self._initialize_health_monitor()
-            
-            self.system_running = True
-            print("✅ JARVIS-X System fully initialized!")
-            self._print_system_status()
-            return True
-            
-        except Exception as e:
-            print(f"❌ System initialization failed: {str(e)}")
-            if self.debug_mode:
-                traceback.print_exc()
-            return False
-    
-    async def _initialize_ai_engine(self):
-        """Initialize the AI Engine module"""
-        module_info = self.modules["ai_engine"]
-        module_info.status = ModuleStatus.INITIALIZING
-        
-        try:
-            print("🧠 Initializing AI Engine...")
-            module_info.instance = JarvisAI()
-            module_info.status = ModuleStatus.ACTIVE
-            module_info.initialized_at = datetime.now()
-            print("✅ AI Engine initialized successfully")
-            
-        except Exception as e:
-            module_info.status = ModuleStatus.ERROR
-            module_info.last_error = str(e)
-            module_info.error_count += 1
-            print(f"❌ AI Engine initialization failed: {str(e)}")
-            raise
-    
-    async def _initialize_file_operations(self):
-        """Initialize the File Operations module"""
-        module_info = self.modules["file_operations"]
-        module_info.status = ModuleStatus.INITIALIZING
-        
-        try:
-            print("📁 Initializing File Operations...")
-            module_info.instance = FileOperationsManager()
-            module_info.status = ModuleStatus.ACTIVE
-            module_info.initialized_at = datetime.now()
-            print("✅ File Operations initialized successfully")
-            
-        except Exception as e:
-            module_info.status = ModuleStatus.ERROR
-            module_info.last_error = str(e)
-            module_info.error_count += 1
-            print(f"❌ File Operations initialization failed: {str(e)}")
-            raise
-    
-    async def _initialize_voice_interface(self):
-        """Initialize the Voice Interface module"""
-        module_info = self.modules["voice_interface"]
-        module_info.status = ModuleStatus.INITIALIZING
-        
-        try:
-            print("🎤 Initializing Voice Interface...")
-            # Import voice module dynamically to avoid startup issues
-            from jarvis_voice_robust import JarvisVoiceRobust
-            module_info.instance = JarvisVoiceRobust()
-            module_info.status = ModuleStatus.ACTIVE
-            module_info.initialized_at = datetime.now()
-            print("✅ Voice Interface initialized successfully")
-            
-        except Exception as e:
-            module_info.status = ModuleStatus.ERROR
-            module_info.last_error = str(e)
-            module_info.error_count += 1
-            print(f"⚠️ Voice Interface initialization failed: {str(e)}")
-            # Voice is optional, don't raise error
-    
-    async def _initialize_gui_interface(self):
-        """Initialize the GUI Interface module"""
-        module_info = self.modules["gui_interface"]
-        module_info.status = ModuleStatus.INITIALIZING
-        
-        try:
-            print("🖥️ Initializing GUI Interface...")
-            # Import GUI module dynamically
-            from ultimate_demon_assistant import UltimateDemonAssistant
-            module_info.instance = UltimateDemonAssistant
-            module_info.status = ModuleStatus.ACTIVE
-            module_info.initialized_at = datetime.now()
-            print("✅ GUI Interface initialized successfully")
-            
-        except Exception as e:
-            module_info.status = ModuleStatus.ERROR
-            module_info.last_error = str(e)
-            module_info.error_count += 1
-            print(f"⚠️ GUI Interface initialization failed: {str(e)}")
-            # GUI is optional, don't raise error
-    
-    async def _initialize_web_search(self):
-        """Initialize the Web Search module"""
-        module_info = self.modules["web_search"]
-        module_info.status = ModuleStatus.INITIALIZING
-        
-        try:
-            print("🌐 Initializing Web Search...")
-            # Placeholder for web search module
-            module_info.instance = None  # Will be implemented later
-            module_info.status = ModuleStatus.ACTIVE
-            module_info.initialized_at = datetime.now()
-            print("✅ Web Search initialized successfully")
-            
-        except Exception as e:
-            module_info.status = ModuleStatus.ERROR
-            module_info.last_error = str(e)
-            module_info.error_count += 1
-            print(f"⚠️ Web Search initialization failed: {str(e)}")
-    
-    async def _initialize_memory_manager(self):
-        """Initialize the Memory Manager module"""
-        module_info = self.modules["memory_manager"]
-        module_info.status = ModuleStatus.INITIALIZING
-        
-        try:
-            print("🧠 Initializing Memory Manager...")
-            # Use AI engine's memory system
-            module_info.instance = self.modules["ai_engine"].instance
-            module_info.status = ModuleStatus.ACTIVE
-            module_info.initialized_at = datetime.now()
-            print("✅ Memory Manager initialized successfully")
-            
-        except Exception as e:
-            module_info.status = ModuleStatus.ERROR
-            module_info.last_error = str(e)
-            module_info.error_count += 1
-            print(f"⚠️ Memory Manager initialization failed: {str(e)}")
-    
-    async def _initialize_health_monitor(self):
-        """Initialize the Health Monitor module"""
-        module_info = self.modules["health_monitor"]
-        module_info.status = ModuleStatus.INITIALIZING
-        
-        try:
-            print("🏥 Initializing Health Monitor...")
-            # Simple health monitoring
-            module_info.instance = self
-            module_info.status = ModuleStatus.ACTIVE
-            module_info.initialized_at = datetime.now()
-            print("✅ Health Monitor initialized successfully")
-            
-        except Exception as e:
-            module_info.status = ModuleStatus.ERROR
-            module_info.last_error = str(e)
-            module_info.error_count += 1
-            print(f"⚠️ Health Monitor initialization failed: {str(e)}")
-    
-    def _print_system_status(self):
-        """Print current system status"""
-        print("\n🔍 SYSTEM STATUS:")
-        print("="*50)
-        
-        for module_name, module_info in self.modules.items():
-            status_icon = {
-                ModuleStatus.ACTIVE: "✅",
-                ModuleStatus.ERROR: "❌",
-                ModuleStatus.INACTIVE: "⏸️",
-                ModuleStatus.UNINITIALIZED: "⏳"
-            }.get(module_info.status, "❓")
-            
-            print(f"{status_icon} {module_name.upper().replace('_', ' ')}: {module_info.status.value}")
-            if module_info.last_error:
-                print(f"   └─ Error: {module_info.last_error}")
-        
-        print("="*50)
+    def print_commands(self):
+        print("\n💬 Commands:")
+        print("  - Type any message to chat with JARVIS")
+        print("  - 'models' - Switch AI model")
+        print("  - 'personality' - Change Jarvis personality mode")
+        print("  - 'auto' - Toggle automatic personality switching")
+        print("  - 'memory' - View conversation summary")
+        print("  - 'insights' - Get conversation insights and patterns")
+        print("  - 'search <query>' - Search conversation history")
+        print("  - 'suggestions' - Get smart suggestions from JARVIS")
+        print("  📁 FILE OPERATIONS:")
+        print("  - 'create project <name> <type>' - Create new project")
+        print("  - 'create file <path>' - Create a text file")
+        print("  - 'read file <path>' - Read file contents")
+        print("  - 'list files [path]' - List directory contents")
+        print("  - 'organize files [path]' - Smart file organization")
+        print("  - 'file info <path>' - Get detailed file information")
+        print("  🌐 WEB & RESEARCH:")
         print("  - 'search web <query>' - Search the internet")
         print("  - 'research <topic>' - Comprehensive research")
         print("  - 'docs <technology>' - Find documentation")
@@ -610,61 +288,6 @@ class JarvisXOrchestrator:
                 self.running = False
             except Exception as e:
                 print(f"❌ Error: {str(e)}")
-    
-    def print_header(self):
-        """Print the JARVIS-X header"""
-        print(f"""
-🤖{"="*70}🤖
-    JARVIS-X ORCHESTRATOR v{self.version}
-    Central Command & Control System
-    
-    🤖 GREETING: Good day, Sir. JARVIS-X systems are operational.
-    🎯 STATUS: All systems ready for your commands
-    🧠 AI ENGINE: {self.ai.get_current_model() if hasattr(self.ai, 'get_current_model') else 'Ready'}
-    🎭 PERSONALITY: {self.ai.get_current_personality() if hasattr(self.ai, 'get_current_personality') else 'Standard'}
-🤖{"="*70}🤖
-""")
-
-    def print_commands(self):
-        """Print available commands"""
-        print("\n🎯 AVAILABLE COMMANDS:")
-        print("="*50)
-        print("  ⚙️  SYSTEM CONTROLS:")
-        print("  - 'models' - Switch AI models")
-        print("  - 'personality' - Switch personality modes")
-        print("  - 'auto' - Toggle auto personality switching")
-        print("  - 'memory' - View conversation memory")
-        print("  - 'insights' - View conversation insights")
-        print("  - 'suggestions' - Get smart suggestions")
-        print("  - 'search <query>' - Search conversation history")
-        print("  📁 FILE OPERATIONS:")
-        print("  - 'create project <name> [type]' - Create new project")
-        print("  - 'create file <path>' - Create new file")
-        print("  - 'read file <path>' - Read file contents")
-        print("  - 'list files [path]' - List directory contents")
-        print("  - 'organize files [path]' - Organize files by type")
-        print("  - 'file info <path>' - Get file information")
-        print("  🌐 WEB & RESEARCH:")
-        print("  - 'search web <query>' - Search the internet")
-        print("  - 'research <topic>' - Comprehensive research")
-        print("  - 'docs <technology>' - Find documentation")
-        print("  💻 CODE ASSISTANCE:")
-        print("  - 'analyze code [type]' - Advanced code analysis")
-        print("    Types: full, quick, security, performance")
-        print("  - 'generate docs' - Generate code documentation")
-        print("  - 'suggest improvements' - Get improvement suggestions")  
-        print("  - 'detect patterns' - Detect code patterns and anti-patterns")
-        print("  🎤 VOICE INTERFACE:")
-        print("  - 'voice on' - Enable voice interface")
-        print("  - 'voice off' - Disable voice interface")
-        print("  - 'voice status' - Check voice interface status")
-        print("  - 'voice test' - Test voice features")
-        print("  - 'voice help' - Voice interface help")
-        print("  - 'clear memory' - Clear conversation history")
-        print("  - 'identity' - View/modify master identity")
-        print("  - 'clear' - Clear screen")
-        print("  - 'exit' or 'quit' - Exit program")
-        print("="*50)
                 
     def run(self):
         os.system('clear' if os.name == 'posix' else 'cls')
@@ -1057,158 +680,31 @@ class JarvisXOrchestrator:
         """Handle voice interface commands"""
         if action == 'enable':
             print("🎤 JARVIS: Voice interface activation requested, Sir.")
-            self._activate_voice_interface()
+            print("🎤 Note: Voice integration is planned for Phase 4. Currently in development.")
         elif action == 'disable':
             print("🎤 JARVIS: Voice interface deactivation requested, Sir.")
-            self._deactivate_voice_interface()
         elif action == 'status':
-            self._show_voice_status()
+            print("🎤 JARVIS: Voice interface status - Development Mode")
+            print("🎤 Available: Text-to-speech capability")
+            print("🎤 Planned: Full voice recognition and response")
         elif action == 'test':
             print("🎤 JARVIS: Testing voice capabilities, Sir...")
-            self._test_voice_interface()
-    
-    def _activate_voice_interface(self):
-        """Activate the voice interface using available voice engines"""
-        try:
-            voice_module = self.modules.get("voice_interface")
-            if voice_module and voice_module.instance:
-                print("🎤 JARVIS: Voice interface already active, Sir.")
-                return
-            
-            print("🎤 JARVIS: Initializing voice systems...")
-            
-            # Try to import and use the robust voice engine
-            try:
-                from jarvis_voice_robust import RobustVoiceEngine
-                voice_engine = RobustVoiceEngine()
-                
-                # Update module status
-                if "voice_interface" in self.modules:
-                    self.modules["voice_interface"].instance = voice_engine
-                    self.modules["voice_interface"].status = ModuleStatus.ACTIVE
-                    self.modules["voice_interface"].initialized_at = datetime.now()
-                
-                print("✅ JARVIS: Robust Voice interface activated successfully!")
-                print("🎤 JARVIS: You can now speak to me, Sir. Say 'Hello JARVIS' to test.")
-                
-                # Start voice listening in background
-                import threading
-                voice_thread = threading.Thread(target=self._run_voice_loop, args=(voice_engine,))
-                voice_thread.daemon = True
-                voice_thread.start()
-                
-            except ImportError as e:
-                print(f"⚠️ JARVIS: Could not import robust voice engine: {e}")
-                # Try premium voice engine
-                try:
-                    from jarvis_voice_premium import PremiumVoiceEngine
-                    voice_engine = PremiumVoiceEngine()
-                    print("✅ JARVIS: Premium voice interface activated!")
-                except ImportError as e2:
-                    print(f"⚠️ JARVIS: Could not import premium voice engine: {e2}")
-                    # Try clean voice engine
-                    try:
-                        from jarvis_voice_clean import CleanVoiceEngine
-                        voice_engine = CleanVoiceEngine()
-                        print("✅ JARVIS: Clean voice interface activated!")
-                    except ImportError as e3:
-                        print(f"❌ JARVIS: No voice engines available. Errors:")
-                        print(f"  - Robust: {e}")
-                        print(f"  - Premium: {e2}")
-                        print(f"  - Clean: {e3}")
-                        return
-            
-        except Exception as e:
-            print(f"❌ JARVIS: Voice activation failed: {str(e)}")
-    
-    def _deactivate_voice_interface(self):
-        """Deactivate the voice interface"""
-        voice_module = self.modules.get("voice_interface")
-        if voice_module and voice_module.instance:
-            voice_module.status = ModuleStatus.INACTIVE
-            print("✅ JARVIS: Voice interface deactivated, Sir.")
-        else:
-            print("🎤 JARVIS: Voice interface was not active, Sir.")
-    
-    def _show_voice_status(self):
-        """Show current voice interface status"""
-        voice_module = self.modules.get("voice_interface")
-        if voice_module:
-            status = voice_module.status.value
-            print(f"🎤 JARVIS: Voice interface status - {status.title()}")
-            
-            if voice_module.instance:
-                engine_type = type(voice_module.instance).__name__
-                print(f"🎤 Engine: {engine_type}")
-                print(f"🎤 Initialized: {voice_module.initialized_at}")
-            
-            print("🎤 Available Commands:")
-            print("  - Say 'Hello JARVIS' to test recognition")
-            print("  - Say 'JARVIS stop listening' to pause")
-            print("  - Use 'voice off' to deactivate")
-        else:
-            print("🎤 JARVIS: Voice interface not initialized, Sir.")
-    
-    def _test_voice_interface(self):
-        """Test voice interface functionality"""
-        voice_module = self.modules.get("voice_interface")
-        if voice_module and voice_module.instance:
-            try:
-                # Test TTS if available
-                voice_engine = voice_module.instance
-                if hasattr(voice_engine, 'speak'):
-                    print("🎤 JARVIS: Testing text-to-speech...")
-                    voice_engine.speak("Good evening, Sir. JARVIS voice systems are operational.")
-                elif hasattr(voice_engine, 'say'):
-                    print("🎤 JARVIS: Testing text-to-speech...")
-                    voice_engine.say("Good evening, Sir. JARVIS voice systems are operational.")
-                else:
-                    print("🎤 JARVIS: Voice engine loaded, but TTS not available.")
-                
-                print("✅ JARVIS: Voice test completed successfully!")
-            except Exception as e:
-                print(f"❌ JARVIS: Voice test failed: {str(e)}")
-        else:
-            print("🎤 JARVIS: Please activate voice interface first with 'voice on'")
-    
-    def _run_voice_loop(self, voice_engine):
-        """Run voice listening loop in background"""
-        try:
-            if hasattr(voice_engine, 'start_listening'):
-                voice_engine.start_listening()
-            elif hasattr(voice_engine, 'listen'):
-                while True:
-                    voice_engine.listen()
-        except Exception as e:
-            print(f"🎤 JARVIS: Voice loop error: {str(e)}")
+            print("🎤 Voice Test: 'Good evening, Sir. JARVIS voice systems operational.'")
 
     def show_voice_help(self):
         """Show voice interface help"""
         print("\n🎤 VOICE INTERFACE HELP:")
-        print("  Current Status: FULLY OPERATIONAL")
+        print("  Current Status: Development Phase")
         print("  Available Commands:")
         print("    - 'voice on' - Enable voice interface")
         print("    - 'voice off' - Disable voice interface") 
         print("    - 'voice status' - Check status")
         print("    - 'voice test' - Test voice features")
-        print("  \n🎯 VOICE ENGINES AVAILABLE:")
-        print("    - Robust Voice Engine (jarvis_voice_robust.py)")
-        print("    - Premium Voice Engine (jarvis_voice_premium.py)")
-        print("    - Clean Voice Engine (jarvis_voice_clean.py)")
-        print("    - LiveKit Voice Engine (jarvis_voice_livekit.py)")
-        print("  \n✅ FEATURES:")
-        print("    - Speech recognition and synthesis")
-        print("    - Wake word detection")
-        print("    - Continuous conversation mode")
-        print("    - Multiple TTS engines (Edge TTS, System TTS)")
-        print("    - Voice activity detection")
-        print("    - Background listening mode")
-        print("  \n🎙️ USAGE:")
-        print("    1. Type 'voice on' to activate")
-        print("    2. Say 'Hello JARVIS' to start conversation")
-        print("    3. Speak naturally - JARVIS will respond")
-        print("    4. Say 'JARVIS stop listening' to pause")
-        print("    5. Type 'voice off' to deactivate")
+        print("  Planned Features:")
+        print("    - Full speech recognition")
+        print("    - Natural voice responses")
+        print("    - Personality-based voice adaptation")
+        print("    - Voice-activated Beast Mode")
 
     def _parse_file_creation_command(self, user_input):
         """Parse file creation commands with improved accuracy"""
@@ -1377,25 +873,16 @@ class JarvisXOrchestrator:
         else:
             print(f"🤖 JARVIS: I'm not sure how to handle '{command}', Sir.")
 
-# Main execution block
+# Main execution block - This is what was missing!
 if __name__ == "__main__":
     try:
-        print("🚀 JARVIS-X: Initializing Central Orchestrator...")
-        
-        # Create JARVIS orchestrator
-        jarvis_orchestrator = JarvisXOrchestrator()
-        
-        # Initialize the system (async method needs to be handled)
-        print("⚙️  Initializing system modules...")
-        
-        # Run the main interface
-        jarvis_orchestrator.run()
-        
+        # Create and run JARVIS terminal interface
+        jarvis_terminal = JarvisXTerminal()
+        jarvis_terminal.run()
     except KeyboardInterrupt:
         print("\n\n👋 JARVIS: Until next time, Sir. Systems powering down...")
     except Exception as e:
         print(f"\n❌ JARVIS: Critical error occurred: {str(e)}")
-        print("💡 Debug info:", traceback.format_exc())
         print("🔧 Please check your configuration and try again.")
     finally:
         print("🤖 JARVIS: Session terminated. Goodbye, Sir.")
