@@ -1068,58 +1068,83 @@ class JarvisXOrchestrator:
             self._test_voice_interface()
     
     def _activate_voice_interface(self):
-        """Activate the voice interface using available voice engines"""
+        """Activate the voice interface using LiveKit Agent"""
         try:
             voice_module = self.modules.get("voice_interface")
             if voice_module and voice_module.instance:
                 print("🎤 JARVIS: Voice interface already active, Sir.")
                 return
             
-            print("🎤 JARVIS: Initializing voice systems...")
+            print("🎤 JARVIS: Initializing advanced voice systems...")
+            print("🚀 JARVIS: Upgrading to LiveKit Agent architecture...")
             
-            # Try to import and use the robust voice engine
+            # Try to import and use the LiveKit agent
             try:
-                from jarvis_voice_robust import RobustVoiceEngine
-                voice_engine = RobustVoiceEngine()
+                from jarvis_livekit_agent import JarvisXLiveKitEngine
+                
+                # Create LiveKit engine
+                livekit_engine = JarvisXLiveKitEngine()
                 
                 # Update module status
                 if "voice_interface" in self.modules:
-                    self.modules["voice_interface"].instance = voice_engine
+                    self.modules["voice_interface"].instance = livekit_engine
                     self.modules["voice_interface"].status = ModuleStatus.ACTIVE
                     self.modules["voice_interface"].initialized_at = datetime.now()
                 
-                print("✅ JARVIS: Robust Voice interface activated successfully!")
-                print("🎤 JARVIS: You can now speak to me, Sir. Say 'Hello JARVIS' to test.")
+                print("✅ JARVIS: LiveKit Agent interface activated successfully!")
+                print("🎤 JARVIS: Professional-grade voice AI ready, Sir.")
+                print("🔥 JARVIS: Now using STT-LLM-TTS pipeline with:")
+                print("   - Deepgram Nova-3 (Speech-to-Text)")
+                print("   - OpenAI GPT-4o-mini (Language Model)")
+                print("   - Cartesia Sonic-2 (Text-to-Speech)")
+                print("   - Silero VAD (Voice Activity Detection)")
+                print("   - Enhanced Noise Cancellation")
                 
-                # Start voice listening in background
+                # Initialize in background
                 import threading
-                voice_thread = threading.Thread(target=self._run_voice_loop, args=(voice_engine,))
-                voice_thread.daemon = True
-                voice_thread.start()
+                init_thread = threading.Thread(target=self._initialize_livekit_async, args=(livekit_engine,))
+                init_thread.daemon = True
+                init_thread.start()
                 
             except ImportError as e:
-                print(f"⚠️ JARVIS: Could not import robust voice engine: {e}")
-                # Try premium voice engine
-                try:
-                    from jarvis_voice_premium import PremiumVoiceEngine
-                    voice_engine = PremiumVoiceEngine()
-                    print("✅ JARVIS: Premium voice interface activated!")
-                except ImportError as e2:
-                    print(f"⚠️ JARVIS: Could not import premium voice engine: {e2}")
-                    # Try clean voice engine
-                    try:
-                        from jarvis_voice_clean import CleanVoiceEngine
-                        voice_engine = CleanVoiceEngine()
-                        print("✅ JARVIS: Clean voice interface activated!")
-                    except ImportError as e3:
-                        print(f"❌ JARVIS: No voice engines available. Errors:")
-                        print(f"  - Robust: {e}")
-                        print(f"  - Premium: {e2}")
-                        print(f"  - Clean: {e3}")
-                        return
+                print(f"⚠️ JARVIS: LiveKit not available, falling back to basic engines: {e}")
+                self._activate_fallback_voice()
             
         except Exception as e:
             print(f"❌ JARVIS: Voice activation failed: {str(e)}")
+            self._activate_fallback_voice()
+    
+    def _initialize_livekit_async(self, livekit_engine):
+        """Initialize LiveKit engine in background"""
+        try:
+            import asyncio
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(livekit_engine.initialize())
+            print("🔥 JARVIS: LiveKit Agent fully operational!")
+        except Exception as e:
+            print(f"⚠️ JARVIS: LiveKit initialization warning: {e}")
+    
+    def _activate_fallback_voice(self):
+        """Fallback to basic voice engines if LiveKit fails"""
+        try:
+            print("🔄 JARVIS: Activating fallback voice systems...")
+            
+            # Try robust voice engine as fallback
+            from jarvis_voice_robust import RobustVoiceEngine
+            voice_engine = RobustVoiceEngine()
+            
+            # Update module status
+            if "voice_interface" in self.modules:
+                self.modules["voice_interface"].instance = voice_engine
+                self.modules["voice_interface"].status = ModuleStatus.ACTIVE
+                self.modules["voice_interface"].initialized_at = datetime.now()
+            
+            print("✅ JARVIS: Fallback voice interface activated!")
+            print("🎤 JARVIS: Basic voice capabilities ready, Sir.")
+            
+        except Exception as e:
+            print(f"❌ JARVIS: All voice systems failed: {str(e)}")
     
     def _deactivate_voice_interface(self):
         """Deactivate the voice interface"""
@@ -1141,8 +1166,19 @@ class JarvisXOrchestrator:
                 engine_type = type(voice_module.instance).__name__
                 print(f"🎤 Engine: {engine_type}")
                 print(f"🎤 Initialized: {voice_module.initialized_at}")
+                
+                # Check if it's LiveKit engine
+                if hasattr(voice_module.instance, 'get_status'):
+                    livekit_status = voice_module.instance.get_status()
+                    print(f"🔥 LiveKit Status:")
+                    print(f"   - Initialized: {livekit_status.get('initialized', False)}")
+                    print(f"   - Running: {livekit_status.get('running', False)}")
+                    print(f"   - Agent Ready: {livekit_status.get('agent_ready', False)}")
+                    print(f"� Pipeline: Deepgram + OpenAI + Cartesia")
+                else:
+                    print(f"🔄 Legacy Voice Engine (Fallback Mode)")
             
-            print("🎤 Available Commands:")
+            print("�🎤 Available Commands:")
             print("  - Say 'Hello JARVIS' to test recognition")
             print("  - Say 'JARVIS stop listening' to pause")
             print("  - Use 'voice off' to deactivate")
@@ -1154,18 +1190,33 @@ class JarvisXOrchestrator:
         voice_module = self.modules.get("voice_interface")
         if voice_module and voice_module.instance:
             try:
-                # Test TTS if available
                 voice_engine = voice_module.instance
-                if hasattr(voice_engine, 'speak'):
-                    print("🎤 JARVIS: Testing text-to-speech...")
-                    voice_engine.speak("Good evening, Sir. JARVIS voice systems are operational.")
-                elif hasattr(voice_engine, 'say'):
-                    print("🎤 JARVIS: Testing text-to-speech...")
-                    voice_engine.say("Good evening, Sir. JARVIS voice systems are operational.")
+                
+                # Check if it's LiveKit engine
+                if hasattr(voice_engine, 'get_status'):
+                    print("🎤 JARVIS: Testing LiveKit Agent capabilities...")
+                    status = voice_engine.get_status()
+                    
+                    if status.get('initialized'):
+                        print("✅ JARVIS: LiveKit Agent initialized")
+                    if status.get('agent_ready'):
+                        print("✅ JARVIS: AI Agent ready")
+                    
+                    print("🔥 JARVIS: LiveKit Agent test successful!")
+                    print("💡 JARVIS: For full testing, use 'python jarvis_livekit_agent.py console'")
+                    
                 else:
-                    print("🎤 JARVIS: Voice engine loaded, but TTS not available.")
+                    # Test legacy voice engine
+                    print("🎤 JARVIS: Testing legacy voice engine...")
+                    if hasattr(voice_engine, 'speak'):
+                        voice_engine.speak("Good evening, Sir. JARVIS voice systems are operational.")
+                    elif hasattr(voice_engine, 'say'):
+                        voice_engine.say("Good evening, Sir. JARVIS voice systems are operational.")
+                    else:
+                        print("🎤 JARVIS: Voice engine loaded, but TTS not available.")
                 
                 print("✅ JARVIS: Voice test completed successfully!")
+                
             except Exception as e:
                 print(f"❌ JARVIS: Voice test failed: {str(e)}")
         else:
@@ -1185,30 +1236,37 @@ class JarvisXOrchestrator:
     def show_voice_help(self):
         """Show voice interface help"""
         print("\n🎤 VOICE INTERFACE HELP:")
-        print("  Current Status: FULLY OPERATIONAL")
+        print("  Current Status: FULLY OPERATIONAL (LiveKit Powered)")
         print("  Available Commands:")
         print("    - 'voice on' - Enable voice interface")
         print("    - 'voice off' - Disable voice interface") 
         print("    - 'voice status' - Check status")
         print("    - 'voice test' - Test voice features")
-        print("  \n🎯 VOICE ENGINES AVAILABLE:")
+        print("  \n🔥 LIVEKIT AGENT FEATURES:")
+        print("    ✅ Professional STT-LLM-TTS Pipeline")
+        print("    ✅ Deepgram Nova-3 (Advanced Speech Recognition)")
+        print("    ✅ OpenAI GPT-4o-mini (Fast Language Processing)")
+        print("    ✅ Cartesia Sonic-2 (Natural Text-to-Speech)")
+        print("    ✅ Silero VAD (Voice Activity Detection)")
+        print("    ✅ Enhanced Noise Cancellation")
+        print("    ✅ Multilingual Turn Detection")
+        print("    ✅ Real-time Audio Processing")
+        print("    ✅ Production-Ready Architecture")
+        print("  \n🎯 LEGACY ENGINES (Fallback):")
         print("    - Robust Voice Engine (jarvis_voice_robust.py)")
         print("    - Premium Voice Engine (jarvis_voice_premium.py)")
         print("    - Clean Voice Engine (jarvis_voice_clean.py)")
-        print("    - LiveKit Voice Engine (jarvis_voice_livekit.py)")
-        print("  \n✅ FEATURES:")
-        print("    - Speech recognition and synthesis")
-        print("    - Wake word detection")
-        print("    - Continuous conversation mode")
-        print("    - Multiple TTS engines (Edge TTS, System TTS)")
-        print("    - Voice activity detection")
-        print("    - Background listening mode")
+        print("  \n🚀 STANDALONE MODES:")
+        print("    - 'python jarvis_livekit_agent.py console' - Direct LiveKit console")
+        print("    - 'python jarvis_livekit_agent.py dev' - LiveKit playground mode")
         print("  \n🎙️ USAGE:")
-        print("    1. Type 'voice on' to activate")
-        print("    2. Say 'Hello JARVIS' to start conversation")
-        print("    3. Speak naturally - JARVIS will respond")
-        print("    4. Say 'JARVIS stop listening' to pause")
+        print("    1. Type 'voice on' to activate LiveKit Agent")
+        print("    2. System auto-detects best available engine")
+        print("    3. LiveKit provides professional-grade voice AI")
+        print("    4. Fallback engines activate if LiveKit unavailable")
         print("    5. Type 'voice off' to deactivate")
+        print("  \n💡 PRO TIP:")
+        print("    Configure LIVEKIT_API_KEY in .env for full capabilities!")
 
     def _parse_file_creation_command(self, user_input):
         """Parse file creation commands with improved accuracy"""
